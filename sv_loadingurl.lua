@@ -28,6 +28,7 @@ end
 function PANEL:Paint()
 end
 
+local lurl
 
 function PANEL:OnActivate()
 
@@ -54,16 +55,22 @@ function PANEL:OnActivate()
 	end)
 	end)
 	
-	local a = vgui.Create('DFrame')
-	a:MakePopup()
-	a:SetSizable(true)
-	a:SetSize(256,256)
-	
 end
 
+hook.Add("DrawOverlay","eek",function()
+	if lurl then
+		lurl:SetPaintedManually(false)
+			lurl:SetAlpha(200)
+			lurl:PaintManual()
+		lurl:SetPaintedManually(true)
+	end
+end)
 
 function PANEL:OnDeactivate()
-
+	if lurl then
+		lurl:Remove()
+		lurl=nil
+	end
 	print("Unloading",GetDefaultLoadingHTML())
 	
 end
@@ -112,6 +119,16 @@ function GameDetails( servername, serverurl, mapname, maxplayers, steamid, gamem
 
 	MsgN( "servername ",servername )
 	MsgN( "serverurl ",serverurl )
+	
+	if not lurl then
+		lurl = vgui.Create('DHTML',self)
+		lurl.Paint=function() end
+		lurl:SetPaintedManually(true)
+		lurl:SetSize(ScrW(),ScrH())
+		lurl:MoveToBack()
+		lurl:OpenURL(g_ServerURL)
+	end
+	
 	MsgN( "gamemode ",gamemode )
 	MsgN( "mapname ",mapname )
 	MsgN( "maxplayers ",maxplayers )
