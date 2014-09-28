@@ -31,9 +31,10 @@ local mainmenu = {
 -- con filter out
 -- console open
 -- devmode quicktoggle
--- favorites and their status
+-- favorites and their status on main menu?
 -- browser? / overlay?
--- ??
+-- client.vdf browser/editor
+-- 
 
 local menulist_wrapper = vgui.Create('DPanelList',nil,'menulist_wrapper')
 local isours
@@ -44,6 +45,12 @@ menulist_wrapper:EnableVerticalScrollbar(true)
 menulist_wrapper:SetWide(350)
 menulist_wrapper:Dock(LEFT)
 menulist_wrapper:DockMargin(32,32,32,32)
+
+
+local div_hack = vgui.Create'EditablePanel'
+div_hack:SetTall(52)
+div_hack:SetZPos(-20000)
+menulist_wrapper:AddItem(div_hack)
 
 local lastscroll = menulist_wrapper.VBar:GetScroll()
 
@@ -142,9 +149,7 @@ function CreateAddons()
 		AddButton(data,data.title,data.mounted,data.downloaded,data.wsid,data.file)
 	end
 	
-	local div = vgui.Create'EditablePanel'
-	div:SetTall(8)
-	menulist_wrapper:AddItem(div)
+	
 	
 	menulist_wrapper.VBar:SetScroll(lastscroll)
 	
@@ -283,8 +288,8 @@ hook.Add( "InGame", "CreateMenu", function(is)
 end )
 
 hook.Add( "ConsoleVisible", "CreateMenu", function(is)
-	CreateMenu()
-	print"ConsoleVisible"
+	--CreateMenu()
+	--print"ConsoleVisible"
 end )
 
 hook.Add( "LoadingStatus", "CreateMenu", function(status)
