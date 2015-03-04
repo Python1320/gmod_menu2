@@ -80,7 +80,7 @@ function CreateAddons()
 		btn:SetText("Enable All")
 		function btn.DoClick(btn)
 			for k,v in next,engine.GetAddons() do
-				steamworks.SetShouldMountAddon(v.file,true)
+				steamworks.SetShouldMountAddon(v.wsid or v.file,true)
 			end
 			isours = true
 			steamworks.ApplyAddons()
@@ -91,7 +91,7 @@ function CreateAddons()
 		btn:SetText("Disable All")
 		function btn.DoClick(btn)
 			for k,v in next,engine.GetAddons() do
-				steamworks.SetShouldMountAddon(v.file,false)
+				steamworks.SetShouldMountAddon(v.wsid or v.file,false)
 			end
 			isours = true
 			steamworks.ApplyAddons()
@@ -104,6 +104,7 @@ function CreateAddons()
 		function btn.DoClick(btn)
 			for k,v in next,engine.GetAddons() do
 				if v.wsid then
+					print("Unsubscribe",v.wsid)
 					steamworks.Unsubscribe(v.wsid)
 				end
 			end
@@ -122,9 +123,25 @@ function CreateAddons()
 			btn:SizeToContents()
 			function btn:OnChange(val)
 				print("mount",filepath,val)
+				local old = steamworks.ShouldMountAddon(wsid)
 				steamworks.SetShouldMountAddon(wsid,val)
 				isours = true steamworks.ApplyAddons() isours = true
-				btn:SetChecked(steamworks.ShouldMountAddon(wsid))
+				local new = steamworks.ShouldMountAddon(wsid)
+				btn:SetChecked(new)
+				if old==new then
+					print("Warning: ","could not toggle",filepath)
+				end
+			end
+			btn.Label.DoRightClick=function()
+				local m =DermaMenu()
+					m:AddOption("Unsubscribe",function()
+						print("Unsubscribe",wsid)
+						steamworks.Unsubscribe(wsid)
+					end)
+					m:AddOption("Copy link",function()
+						SetClipboardText('http://steamcommunity.com/sharedfiles/filedetails/?id='..wsid)
+					end)
+				m:Open()
 			end
 	
 		btn:InvalidateLayout(true)
@@ -152,6 +169,55 @@ function CreateAddons()
 	
 	
 	menulist_wrapper.VBar:SetScroll(lastscroll)
+	
+end
+
+
+
+local settingslist
+function CreateExtraSettings()
+	
+	if settingslist and settingslist:IsValid() then settingslist:Remove() settingslist=nil end
+	
+	settingslist = vgui.Create('DForm',menulist_wrapper,'settingslist')
+	settingslist:Dock(TOP)
+	settingslist:SetName"Extra Settings"
+	settingslist:SetExpanded(false)
+	settingslist.Header:SetIcon 'icon16/cog.png'
+	settingslist:SetCookieName"settingslist"
+	settingslist:LoadCookies()
+	
+	menulist_wrapper:AddItem(settingslist)
+	menulist_wrapper:InvalidateLayout(true)
+	settingslist:InvalidateLayout(true)
+	
+	local function AddCheck(txt,cvar)
+		
+		local 
+			c = vgui.Create( 'DCheckBoxLabel',settingslist,'settingslist_check')
+				settingslist:AddItem(c)
+			c:SetText( txt )
+			c:SetConVar(cvar)
+			c:SetBright(true)
+			c:SizeToContents()
+			c:InvalidateLayout(true)
+		return c
+	end
+
+	local x = vgui.Create( 'DLabel',settingslist)
+	x:SetText"Loading Screen"
+	settingslist:AddItem(x)
+	AddCheck( "Enable","lua_loading_screen")
+	AddCheck( "Transparency","lua_loading_screen_transp")
+	AddCheck( "Try hiding","lua_loading_screen_hide")
+	local x = vgui.Create( 'DLabel',settingslist)
+	x:SetText"Download / Upload"
+	settingslist:AddItem(x)
+	AddCheck( "Allow DL","cl_allowdownload")
+	AddCheck( "Allow UL","cl_allowupload")
+	local x = vgui.Create( 'DLabel',settingslist)
+	x:SetText" "
+	settingslist:AddItem(x)
 	
 end
 
@@ -272,6 +338,7 @@ function CreateMenu()
 		AddButton(data,data[1],data[2],data[3])
 	end
 	
+	CreateExtraSettings()
 	CreateGames()
 end
 CreateMenu()

@@ -30,6 +30,8 @@ end
 
 local lurl
 
+local lua_loading_screen_hide = CreateClientConVar("lua_loading_screen_hide","0",true,false)
+
 function PANEL:OnActivate()
 
 	g_ServerName	= ""
@@ -39,6 +41,8 @@ function PANEL:OnActivate()
 	g_SteamID		= ""
 
 	print("LoadingURL",GetConVarString"hostip")
+	if not lua_loading_screen_hide:GetBool() then return end
+	
 	RawConsoleCommand "showconsole"
 	RawConsoleCommand "gameui_hide"
 	gui.HideGameUI()
@@ -57,10 +61,11 @@ function PANEL:OnActivate()
 	
 end
 
-hook.Add("DrawOverlay","eek",function()
+local lua_loading_screen_transp = CreateClientConVar("lua_loading_screen_transp","1",true,false)
+hook.Add("DrawOverlay","loading_screen",function()
 	if lurl then
 		lurl:SetPaintedManually(false)
-			lurl:SetAlpha(200)
+			lurl:SetAlpha(lua_loading_screen_transp:GetBool() and 200 or 255)
 			lurl:PaintManual()
 		lurl:SetPaintedManually(true)
 	end
@@ -105,6 +110,7 @@ function UpdateLoadPanel( strJavascript )
 	print("UpdateLoadPanel",strJavascript)
 end
 
+local lua_loading_screen = CreateClientConVar("lua_loading_screen","1",true,false)
 
 function GameDetails( servername, serverurl, mapname, maxplayers, steamid, gamemode )
 
@@ -120,7 +126,7 @@ function GameDetails( servername, serverurl, mapname, maxplayers, steamid, gamem
 	MsgN( "servername ",servername )
 	MsgN( "serverurl ",serverurl )
 	
-	if not lurl then
+	if not lurl and lua_loading_screen:GetBool() then
 		lurl = vgui.Create('DHTML',self)
 		lurl.Paint=function() end
 		lurl:SetPaintedManually(true)
