@@ -295,3 +295,20 @@ function SearchWorkshop(str)
 	str = "http://steamcommunity.com/workshop/browse?searchtext="..str.."&childpublishedfileid=0&section=items&appid=4000&browsesort=trend&requiredtags[]=-1"
 	gui.OpenURL(str)
 end
+
+function CompileFile(path)
+	local f = file.Open(path,'rb','LuaMenu')
+	if not f then
+		ErrorNoHalt("Could not open: "..path..'\n')
+		return
+	end	
+	local str = f:Read(f:Size())
+	f:Close()
+	
+	local func = CompileString(str,'@'..path,false)
+	if isstring(func) then
+		error(func)
+	else
+		return func
+	end
+end
