@@ -1,6 +1,11 @@
 # gmod_menu2
-This voids any warrant, not guaranteed to work or help you, bye
+This voids any warrant, not guaranteed to work or help you, bye.
 
+Features
+=======
+ - No awesomium
+ - no features
+ 
 Usage
 =======
 Save the lua files to garrysmod/lua/menu2/
@@ -8,6 +13,9 @@ Edit garrysmod/lua/includes/menu.lua
 Replace ```include( "menu/menu.lua" )``` with ```include( "menu2/menu.lua" )```
 Enjoy very minimal menu, feel free to make it less minimal but only a little less.
 
+Screenshots
+=======
+![](http://i.imgur.com/lh647tj.png)
 
 License
 =======
