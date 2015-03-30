@@ -215,6 +215,7 @@ function CreateExtraSettings()
 	settingslist:AddItem(x)
 	AddCheck( "Allow DL","cl_allowdownload")
 	AddCheck( "Allow UL","cl_allowupload")
+	AddCheck( "FastDL debug","download_debug")
 	local x = vgui.Create( 'DLabel',settingslist)
 	x:SetText" "
 	settingslist:AddItem(x)
