@@ -1,4 +1,13 @@
 @echo off
+if exist extra goto skipclone
+
+git clone --recursive --branch luaserverlist https://github.com/Python1320/gmod_menu2
+goto cloned
+
+:skipclone
+git submodule foreach git pull
+:cloned
+
 if NOT EXIST extra\vstruct\lua\vstruct\vstruct GOTO NOTOK1
 if NOT EXIST ../../steam.inf GOTO NOTOK2
 if NOT EXIST ../includes GOTO NOTOK2

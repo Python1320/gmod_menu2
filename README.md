@@ -30,6 +30,7 @@ Credits
  - CapsAdmin, country flags code for server query GUI
  - Mark James, country flags
  - Garry, Garry's Mod
+ - GeoIP data, MaxiMind
 
 License
 =======
