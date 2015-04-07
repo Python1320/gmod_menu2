@@ -1,7 +1,5 @@
+-- fallback
+if not file.Exists("menu2/menu.lua",'LuaMenu') then include( "menu/menu.lua" ) return end
 
-if file.Exists("lua/menu2/menu.lua",'LuaMenu') then
-	include( "menu2/menu.lua" )
-	return
-end
-
-include( "menu/menu.lua" )
+-- include menu2
+include( "menu2/menu.lua" )
