@@ -12,9 +12,11 @@ Usage
  2. Copy files from ```menu2/extra/garrysmod/``` to ```garrysmod/``` so you have ```garrysmod/lua/bin/gmsv_geoip_win32.dll```
  3. copy ```menu2/extra/serverquery/lua``` to ```garrysmod/``` so you have ```garrysmod/lua/includes/modules/serverquery.lua```
  4. copy ```menu2/extra/vstruct/lua``` to ```garrysmod/``` so you have ```garrysmod/lua/vstruct/vstruct/init.lua```
-
+FINALLY
  5. Edit ```garrysmod/lua/includes/menu.lua```
 Replace ```include( "menu/menu.lua" )``` with ```include( "menu2/menu.lua" )```
+
+Alternatively use install.cmd (unstable)
 
 Screenshots
 =======

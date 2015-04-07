@@ -19,3 +19,4 @@ include( "menu/motionsensor.lua" )
 include( "serverquery.lua" )
 
 print "Loaded Menu2"
+MENU2_LOADED = true
