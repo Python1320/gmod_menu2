@@ -1,0 +1,4 @@
+[submodule "extra/vstruct"]
+	path = extra/vstruct
+	url = https://github.com/Python1320/gmod_vstruct
+	branch = master
