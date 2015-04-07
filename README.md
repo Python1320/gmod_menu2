@@ -3,13 +3,17 @@ This voids any warrant, not guaranteed to work or help you, bye.
 
 Features
 =======
- - No awesomium
  - no features
+ - No awesomium necessary
  
 Usage
 =======
- - Copy this repo to ```garrysmod/lua/menu2/``` so you have ```garrysmod/menu2/extra/vstruct/lua/vstruct/vstruct```
- - Edit ```garrysmod/lua/includes/menu.lua```
+ 1. Copy this repo to ```garrysmod/lua/menu2/``` so you have ```garrysmod/menu2/menu.lua```
+ 2. Copy files from ```menu2/extra/garrysmod/``` to ```garrysmod/``` so you have ```garrysmod/lua/bin/gmsv_geoip_win32.dll```
+ 3. copy ```menu2/extra/serverquery/lua``` to ```garrysmod/``` so you have ```garrysmod/lua/includes/modules/serverquery.lua```
+ 4. copy ```menu2/extra/vstruct/lua``` to ```garrysmod/``` so you have ```garrysmod/lua/vstruct/vstruct/init.lua```
+
+ 5. Edit ```garrysmod/lua/includes/menu.lua```
 Replace ```include( "menu/menu.lua" )``` with ```include( "menu2/menu.lua" )```
 
 Screenshots
