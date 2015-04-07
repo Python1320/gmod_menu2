@@ -1,6 +1,7 @@
 
-local ok = pcall(include, "menu2/menu.lua" )
-
-if not ok or not MENU2_LOADED then
-	include( "menu/menu.lua" )
+if file.Exists("lua/menu2/menu.lua",'LuaMenu') then
+	include( "menu2/menu.lua" )
+	return
 end
+
+include( "menu/menu.lua" )
