@@ -1,11 +1,20 @@
-pcall(require,'co')
+
 if MENU_DLL then
-	include'menu2/country_flags.lua'
+	pcall(include,'menu2/country_flags.lua')
 end
 
 pcall(require,'serverquery')
 
-local frame = vgui.Create('DFrame',nil,'server_query')
+local frame
+function OpenServerList()
+
+if frame and frame:IsValid() then 
+	frame:RequestFocus()
+	frame:MoveToFront()
+	return
+end
+
+frame = vgui.Create('DFrame',nil,'server_query')
 local function SetNum(n)
     frame:SetTitle(("Server Browser (%d servers)"):format(n))
 end
@@ -111,9 +120,11 @@ function PANEL:GetUnderMouse()
     
     local i = 1+start+(diff2+cy-2)/pnl_height
     i=math.floor(i)
-    print(i)
+
     if srv[i] then
          return srv[i]
+	else
+		print("noon",i)
     end
 end
 
@@ -125,6 +136,7 @@ function PANEL:OnMousePressed()
     if not entry then 
 		if off then
 			self.dragging = true
+			self:MouseCapture(true)
 		end
 		return 
 	end
@@ -136,6 +148,7 @@ function PANEL:OnMouseReleased()
 
 	if self.dragging then
 		self.dragging = false
+		self:MouseCapture(false)
 	end
 	
 	local pressed = self.pressed
@@ -182,7 +195,7 @@ end
 
 
 local surface=surface
-local deffont = 'DermaDefault'
+local deffont = 'BudgetLabel'
 
 lister.servers = {}
 lister.filterservers = {}
@@ -413,9 +426,10 @@ refr.DoClick=function()
             if ok~=200 then return end
             dat = util.Decompress(dat)
             local t = util.JSONToTable(dat)
-            lister.servers = t
-            lister.filterservers = table.Copy(t)
-            
+            for k,v in next,t do
+				add(v)
+			end
+			
         end)
         return
     end
@@ -461,5 +475,9 @@ end
 
 txtentry:RequestFocus()
 
+end -- OpenServerList
 
+concommand.Add("lua_openserverbrowser",function()
+	OpenServerList()
+end)
 

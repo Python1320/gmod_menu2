@@ -10,8 +10,9 @@ local mainmenu = {
 	{"GameUI_GameMenu_PlayerList",	M"openplayerlistdialog",        	"icon16/group_delete.png"			,show=IsInGame},
 	
 	{"",show=WasInGame},
-	{"new_game",					M"opencreatemultiplayergamedialog", "icon16/server.png"					},
+	--{"new_game",					M"opencreatemultiplayergamedialog", "icon16/server.png"					},
 	{"server_list",					M"openserverbrowser",               "icon16/world.png"					},
+	{"server_list",					R"lua_openserverbrowser",               "icon16/world.png"					},
 	
 	{""},
 	{"options",						M"openoptionsdialog",               "icon16/wrench.png"					},

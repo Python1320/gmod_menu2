@@ -2,3 +2,6 @@
 	path = extra/vstruct
 	url = https://github.com/Python1320/gmod_vstruct
 	branch = master
+[submodule "extra/serverquery"]
+	path = extra/serverquery
+	url = https://github.com/Python1320/serverquery

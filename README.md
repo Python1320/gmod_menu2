@@ -16,6 +16,7 @@ Enjoy very minimal menu, feel free to make it less minimal but only a little les
 Screenshots
 =======
 ![](http://i.imgur.com/lh647tj.png)
+![test server browser](http://i.imgur.com/BBIHmyC.png)
 
 License
 =======

@@ -16,4 +16,6 @@ include( "menu/motionsensor.lua" )
 --include( "menu2/menu_addon.lua" )
 --include( "menu2/menu_dupe.lua" )
 
+include( "serverquery.lua" )
+
 print "Loaded Menu2"
