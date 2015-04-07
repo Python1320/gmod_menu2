@@ -23,6 +23,14 @@ Screenshots
 ![](http://i.imgur.com/lh647tj.png)
 ![test server browser](http://i.imgur.com/BBIHmyC.png)
 
+Credits
+=======
+ - Valve, server query servers
+ - Python1320, server query library
+ - CapsAdmin, country flags code for server query GUI
+ - Mark James, country flags
+ - Garry, Garry's Mod
+
 License
 =======
 This is free and unencumbered software released into the public domain.
