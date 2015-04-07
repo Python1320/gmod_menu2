@@ -8,10 +8,9 @@ Features
  
 Usage
 =======
-Save the lua files to garrysmod/lua/menu2/
-Edit garrysmod/lua/includes/menu.lua
+ - Copy this repo to ```garrysmod/lua/menu2/``` so you have ```garrysmod/menu2/extra/vstruct/lua/vstruct/vstruct```
+ - Edit ```garrysmod/lua/includes/menu.lua```
 Replace ```include( "menu/menu.lua" )``` with ```include( "menu2/menu.lua" )```
-Enjoy very minimal menu, feel free to make it less minimal but only a little less.
 
 Screenshots
 =======
