@@ -30,7 +30,7 @@ end
 
 local lurl
 
-local lua_loading_screen_hide = CreateClientConVar("lua_loading_screen_hide","0",true,false)
+local lua_loading_screen_hide = CreateClientConVar("lua_loading_screen_hide","1",true,false)
 
 function PANEL:OnActivate()
 
@@ -43,25 +43,27 @@ function PANEL:OnActivate()
 	print("LoadingURL",GetConVarString"hostip")
 	if not lua_loading_screen_hide:GetBool() then return end
 	
-	RawConsoleCommand "showconsole"
-	RawConsoleCommand "gameui_hide"
+	RunConsoleCommand "showconsole"
 	gui.HideGameUI()
+	gui.ActivateGameUI()
 	timer.Simple(0,function()
 		gui.HideGameUI()
+		gui.ActivateGameUI()
 		self:SetPopupStayAtBack(true)
 		self:MoveToBack()
-	RawConsoleCommand "showconsole"
-	RawConsoleCommand "gameui_hide"
+	RunConsoleCommand "showconsole"
 	timer.Simple(1,function()
 		gui.HideGameUI()
+		gui.ActivateGameUI()
 		self:SetPopupStayAtBack(true)
 		self:MoveToBack()
+		RunConsoleCommand "showconsole"
 	end)
 	end)
 	
 end
 
-local lua_loading_screen_transp = CreateClientConVar("lua_loading_screen_transp","1",true,false)
+local lua_loading_screen_transp = CreateClientConVar("lua_loading_screen_transp","0",true,false)
 hook.Add("DrawOverlay","loading_screen",function()
 	if lurl then
 		lurl:SetPaintedManually(false)
@@ -104,25 +106,28 @@ function GetLoadPanel()
 	
 end
 
+-- Uncomment this to make loading panel centered
+-- GetLoadPanel=nil
+
 --engine
 function UpdateLoadPanel( strJavascript )
 	
 	print("UpdateLoadPanel",strJavascript)
 end
 
-local lua_loading_screen = CreateClientConVar("lua_loading_screen","1",true,false)
+local lua_loading_screen = CreateClientConVar("lua_loading_screen","0",true,false)
 
 function GameDetails( servername, serverurl, mapname, maxplayers, steamid, gamemode )
 
 	if ( engine.IsPlayingDemo() ) then return end
 
+	
 	g_ServerName	= servername
 	g_MapName		= mapname
 	g_ServerURL		= serverurl
 	g_MaxPlayers	= maxplayers
 	g_SteamID		= steamid
 	g_GameMode		= gamemode
-
 	MsgN( "servername ",servername )
 	MsgN( "serverurl ",serverurl )
 	
@@ -135,6 +140,7 @@ function GameDetails( servername, serverurl, mapname, maxplayers, steamid, gamem
 		lurl:OpenURL(g_ServerURL)
 	end
 	
+	
 	MsgN( "gamemode ",gamemode )
 	MsgN( "mapname ",mapname )
 	MsgN( "maxplayers ",maxplayers )
@@ -143,4 +149,6 @@ function GameDetails( servername, serverurl, mapname, maxplayers, steamid, gamem
 	serverurl = serverurl:Replace( "%s", steamid )
 	serverurl = serverurl:Replace( "%m", mapname )
 
+	if CreateMenu then CreateMenu() end
+	
 end

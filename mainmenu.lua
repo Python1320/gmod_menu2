@@ -1,4 +1,4 @@
-local R=function(x) return function() return RawConsoleCommand(x) end end
+local R=function(a,b,c,d,e) return function() return RunConsoleCommand(a,b,c,d,e) end end
 local M=function(x) return function() return RunGameUICommand(x) end end
 local NOT=function(f) return function(...) return not f(...) end end
 
@@ -7,17 +7,17 @@ local mainmenu = {
 	{"resume_game",					gui.HideGameUI,                      "icon16/joystick.png"				,show=IsInGame},
 	{"disconnect",					M"disconnect",                      "icon16/disconnect.png"				,show=IsInGame},
 	{"reconnect",					R"retry",                      		"icon16/connect.png"				,show=WasInGame},
-	{"GameUI_GameMenu_PlayerList",	M"openplayerlistdialog",        	"icon16/group_delete.png"			,show=IsInGame},
+	{"server_players",	M"openplayerlistdialog",        	"icon16/group_delete.png"			,show=IsInGame},
 	
 	{"",show=WasInGame},
 	--{"new_game",					M"opencreatemultiplayergamedialog", "icon16/server.png"					},
-	{"server_list",					M"openserverbrowser",               "icon16/world.png"					},
+	{"legacy_browser",					M"openserverbrowser",               "icon16/world.png"					},
 	{"server_list",					R"lua_openserverbrowser",               "icon16/world.png"					},
 	
 	{""},
 	{"options",						M"openoptionsdialog",               "icon16/wrench.png"					},
 	{"GameUI_Console",				R"showconsole",                   	"icon16/application_xp_terminal.png",
-		show=function() return DEVELOPER and not gui.IsConsoleVisible() end},
+		show=function() return IsDeveloper() and not gui.IsConsoleVisible() end},
 	
 	{""},
 	{"GameUI_Quit",					M"quitnoconfirm",                   "icon16/door.png"					},
@@ -64,7 +64,7 @@ function CreateAddons()
 	
 	addonslist = vgui.Create('DForm',menulist_wrapper,'addonslist')
 	addonslist:Dock(TOP)
-	addonslist:SetName"Installed Addons"
+	addonslist:SetName"#manage_addons"
 	addonslist:SetExpanded(false)
 	
 	addonslist:SetCookieName"addonslist"
@@ -78,7 +78,9 @@ function CreateAddons()
 
 	local btn = vgui.Create("DButton",addonslist,'addonslist_button')
 		addonslist:AddItem(btn)
-		btn:SetText("Enable All")
+		btn:SetText("#addons.enableall")
+		btn:SetIcon 'icon16/add.png'
+		
 		function btn.DoClick(btn)
 			for k,v in next,engine.GetAddons() do
 				steamworks.SetShouldMountAddon(v.wsid or v.file,true)
@@ -86,10 +88,15 @@ function CreateAddons()
 			isours = true
 			steamworks.ApplyAddons()
 			isours = true
+			
+			CreateMenu()
+
 		end
 	local btn = vgui.Create("DButton",addonslist,'addonslist_button')
 		addonslist:AddItem(btn)
-		btn:SetText("Disable All")
+		btn:SetText("#addons.disableall")
+		btn:SetIcon 'icon16/delete.png'
+		
 		function btn.DoClick(btn)
 			for k,v in next,engine.GetAddons() do
 				steamworks.SetShouldMountAddon(v.wsid or v.file,false)
@@ -97,11 +104,12 @@ function CreateAddons()
 			isours = true
 			steamworks.ApplyAddons()
 			isours = true
-
+			CreateMenu()
 		end
 	local btn = vgui.Create("DButton",addonslist,'addonslist_button')
 		addonslist:AddItem(btn)
-		btn:SetText("Unsubscribe All")
+		btn:SetText("#addons.uninstallall")
+		btn:SetIcon 'icon16/stop.png'
 		function btn.DoClick(btn)
 			for k,v in next,engine.GetAddons() do
 				if v.wsid then
@@ -110,7 +118,7 @@ function CreateAddons()
 				end
 			end
 			isours = true steamworks.ApplyAddons() isours = true
-		
+			CreateMenu()
 		end
 
 	local function AddButton(data,title,mounted,downloaded,wsid,filepath)
@@ -135,11 +143,11 @@ function CreateAddons()
 			end
 			btn.Label.DoRightClick=function()
 				local m =DermaMenu()
-					m:AddOption("Unsubscribe",function()
+					m:AddOption("#addon.unsubscribe",function()
 						print("Unsubscribe",wsid)
 						steamworks.Unsubscribe(wsid)
 					end)
-					m:AddOption("Copy link",function()
+					m:AddOption("#copy",function()
 						SetClipboardText('http://steamcommunity.com/sharedfiles/filedetails/?id='..wsid)
 					end)
 				m:Open()
@@ -233,7 +241,7 @@ function CreateGames()
 	
 	gameslist = vgui.Create('DForm',menulist_wrapper,'gameslist')
 	gameslist:Dock(TOP)
-	gameslist:SetName"Mounted games"
+	gameslist:SetName"#mounted_games"
 	gameslist:SetExpanded(false)
 	gameslist.Header:SetIcon 'icon16/joystick.png'
 	gameslist:SetCookieName"gameslist"
@@ -284,7 +292,9 @@ end
 
 
 local menulist
-function CreateMenu()
+local creating
+local function _CreateMenu()
+	creating = false
 	
 	lastscroll = menulist_wrapper.VBar:GetScroll()
 	
@@ -342,10 +352,27 @@ function CreateMenu()
 	
 	CreateExtraSettings()
 	CreateGames()
+	
+	menulist:InvalidateLayout(true)
+	
 end
-CreateMenu()
+
+function CreateMenu()
+	if creating then return end
+	creating = true
+	timer.Simple(0.2,function()
+		_CreateMenu()
+	end)
+end
+
+--CreateMenu()
 
 hook.Add( "GameContentsChanged", "CreateMenu", function(mount,addon)
+	if mount then return end
+	
+	-- EEK
+	if not mount and not addon then return end
+	
 	if isours then isours = false return end
 
 	CreateMenu()
@@ -357,8 +384,11 @@ hook.Add( "InGame", "CreateMenu", function(is)
 end )
 
 hook.Add( "ConsoleVisible", "CreateMenu", function(is)
-	--CreateMenu()
-	--print"ConsoleVisible"
+	
+	if IsDeveloper() then 
+		CreateMenu()
+	end
+	
 end )
 
 hook.Add( "LoadingStatus", "CreateMenu", function(status)

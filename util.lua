@@ -1,6 +1,14 @@
-DEVELOPER = GetConVar"developer":GetBool()
 
-if DEVELOPER then
+do 
+	local developer = GetConVar("developer")
+	_G.DEVELOPER = developer:GetBool()
+
+	function IsDeveloper(n)
+		return developer:GetInt() >= (n or 1)
+	end
+end
+
+if IsDeveloper() then
 	local function lua_run_menu(_,_,_,code)
 		local func = CompileString(code,"",false)
 		if isstring(func) then
@@ -106,7 +114,12 @@ hook.Add( "MenuStart", "Menu2", function()
 	print"MenuStart"
 end )
 hook.Add( "ConsoleVisible", "Menu2", function(is)
-	print(is and "CONSOLE" or "NO CONSOLE")
+	
+	print(is 
+		and	'<console on>'
+		or	'<console off>'
+	)
+	
 end )
 hook.Add( "InGame", "Menu2", function(is)
 	print(is and "InGame" or "Out of game")
@@ -120,7 +133,12 @@ local isingame = IsInGame()
 local wasingame = false
 local status = GetLoadStatus()
 local console
+local alt
 hook.Add( "Think", "Menu2", function()
+
+	-- every other Think is enough
+	alt = not alt if alt then return end
+	
 	local is=IsInGame()
 	
 	if is~=isingame then
@@ -211,11 +229,11 @@ hook.Add( "GameContentChanged", "Menu2", function()
 			continue
 		end
 	end
-	if not wasmount and not wasaddon then
-		print("Unhandled GameContentChanged")
-	else
-		hook.Call("GameContentsChanged",nil,wasmount,wasaddon)
-	end
+	--if not wasmount and not wasaddon then
+	if IsDeveloper(2) then print("MENU: Unhandled GameContentChanged") end
+	--else
+	hook.Call("GameContentsChanged",nil,wasmount,wasaddon)
+	--end
 end )
 
 

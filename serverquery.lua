@@ -23,7 +23,7 @@ end
 
 SetNum(0)
 
-frame:SetSize(640,480)
+frame:SetSize(1000,550)
 frame:SetSizable(true)
 frame:SetPos(10,256)
 frame:MakePopup()
@@ -160,7 +160,9 @@ function PANEL:OnMouseReleased()
 		local entry = self:GetUnderMouse()
 		
 		if entry and pressing and pressed == entry then
-			print( tostring(entry[1])..':'..tostring(entry[2]) )
+			local addr = tostring(entry[1])..':'..tostring(entry[2])
+			print( "Joining "..addr )
+			_G.JoinServer(addr)
 		end
     end
 
@@ -412,7 +414,7 @@ refr.DoClick=function()
                 if refr:IsValid() then
                     refr:SetDisabled(false)
 		        end
-		        print"END STOP!!!"
+		        print"Search: Stopped"
 		    end
     	--	Msg"[Server Info] Fail "print(entry,x)
     		return
