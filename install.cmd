@@ -16,6 +16,7 @@ call install.cmd
 exit 0
 
 :skipclone
+git checkout gzip.exe wget.exe README.md
 git pull
 git submodule update --recursive
 goto skipclone2
@@ -64,3 +65,4 @@ goto EOF
 goto EOF
 :EOF
 pause
+del /Q gzip.exe wget.exe README.md GeoLiteCity.dat

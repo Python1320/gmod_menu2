@@ -1,3 +1,4 @@
+MsgN"Loading menu2..."
 include( "menu2/util.lua" )
 
 include( "menu/mount/mount.lua" ) -- workshop
@@ -18,5 +19,5 @@ include( "menu/motionsensor.lua" )
 
 include( "serverquery.lua" )
 
-print "Loaded Menu2"
+print "...loaded Menu2!"
 MENU2_LOADED = true
