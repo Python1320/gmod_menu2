@@ -17,7 +17,7 @@ exit 0
 
 :skipclone
 git pull
-git submodule foreach git pull
+git submodule update --recursive
 goto skipclone2
 
 :cloned
