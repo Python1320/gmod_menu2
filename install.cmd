@@ -39,10 +39,10 @@ ROBOCOPY extra\vstruct\lua ../ *.* /s /NFL /NDL /NJH /NJS
 echo GeoIP file check..
 if exist ..\..\..\GeoIP.dat goto skipgeoip
 echo Downloading GeoIP...
-powershell -command "(new-object System.Net.WebClient).DownloadFile('http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz', 'GeoIP.dat.gz')"
+wget "http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz"
 echo Extracting GeoIP.dat.gz and copying to where hl2.exe is
-gunzip GeoIP.dat.gz
-copy GeoIP.dat ..\..\..\GeoIP.dat
+gzip -d GeoLiteCity.dat.gz
+copy GeoLiteCity.dat ..\..\..\GeoIP.dat
 :skipgeoip
 
 echo === ALL DONE, maybe ===
