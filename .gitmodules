@@ -5,3 +5,4 @@
 [submodule "extra/serverquery"]
 	path = extra/serverquery
 	url = https://github.com/Python1320/serverquery
+	branch = master
